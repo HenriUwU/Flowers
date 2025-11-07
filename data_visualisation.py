@@ -1,11 +1,11 @@
-import matplotlib.pyplot as plt
 import os
 
-from matplotlib.pyplot import title
+import matplotlib.pyplot as plt
 
 flower_types = ['daisy', 'dandelion', 'rose', 'sunflower', 'tulip']
 colors = ['orange', 'cyan', 'pink', 'indigo', 'beige']
-explode = [0.1, 0.1, 0.1, 0.1, 0.1]
+explode = [0.05, 0.05, 0.05, 0.05, 0.05]
+
 
 def count_data():
     dataset_dir = os.path.join(os.getcwd(), 'dataset/train')
@@ -21,24 +21,38 @@ def count_data():
 
     return dict(zip(flower_types, number_of_images))
 
+
+def percentage_formatting(percentage):
+    return '{:.1f}%\n'.format(percentage)
+
+
 def visualize_data():
     data = count_data()
     flowers = list(data.keys())
     nb_flowers = list(data.values())
 
-    # plt.pie(list(data.values()), labels=list(data.keys()))
-    fix, ax = plt.subplots(figsize=(12, 12))
-    ax.pie(nb_flowers,
-           labels=flowers,
-           shadow=True,
-           startangle=90,
-           colors=colors,
-           explode=explode)
-    ax.set_title("Distribution of flower types")
+    fix, ax = plt.subplots(figsize=(12, 10))
+    wedges, texts, autotexts = ax.pie(nb_flowers,
+                                      labels=flowers,
+                                      shadow=False,
+                                      autopct=lambda p: percentage_formatting(p),
+                                      startangle=90,
+                                      colors=colors,
+                                      explode=explode,
+                                      wedgeprops=dict(linewidth=2, edgecolor='lightgreen'))
+
+    ax.set_title('Distribution of flower types in the dataset', size=20, weight='bold')
+    ax.legend(wedges, flowers, loc='lower left')
+
+    plt.setp(autotexts, size=10, weight='bold', color='black')
+    plt.setp(texts, size=12, weight='bold', color='black')
+
     plt.show()
+
 
 def main():
     visualize_data()
+
 
 if __name__ == '__main__':
     main()
