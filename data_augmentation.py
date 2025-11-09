@@ -52,9 +52,9 @@ def move_augmented_data(flower_type):
 
 
 def main():
-    if not os.path.exists(augmented_data_dir):
-        os.mkdir(augmented_data_dir)
-        print('Augmented dataset directory created successfully')
+    if os.path.exists(augmented_data_dir):
+        shutil.rmtree(augmented_data_dir)
+    os.mkdir(augmented_data_dir)
     for flower_type in flower_types:
         data_augmentation(flower_type)
         move_augmented_data(flower_type)

@@ -47,7 +47,12 @@ def visualize_data(augmented: bool):
                                       explode=explode,
                                       wedgeprops=dict(linewidth=2, edgecolor='lightgreen'))
 
-    ax.set_title('Distribution of flower types in the dataset', size=20, weight='bold')
+    if augmented:
+        title = 'Distribution of flower types (augmented)'
+    else:
+        title = 'Distribution of flower types'
+
+    ax.set_title(title, size=20, weight='bold')
     ax.legend(wedges, flowers, loc='lower left')
 
     plt.setp(autotexts, size=10, weight='bold', color='black')
