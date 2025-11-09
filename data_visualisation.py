@@ -2,21 +2,27 @@ import os
 
 import matplotlib.pyplot as plt
 
-flower_types = ['daisy', 'dandelion', 'rose', 'sunflower', 'tulip']
+from constants import flower_types
+from constants import training_set_dir
+from constants import augmented_data_dir
+
 colors = ['orange', 'cyan', 'pink', 'indigo', 'beige']
 explode = [0.05, 0.05, 0.05, 0.05, 0.05]
 
 
-def count_data():
-    dataset_dir = os.path.join(os.getcwd(), 'dataset/train')
+def count_data(augmented: bool):
     number_of_images = []
 
     for flower_type in flower_types:
-        flower_dir = os.path.join(dataset_dir, flower_type)
+        if augmented:
+            flower_dir = os.path.join(augmented_data_dir, flower_type)
+        else:
+            flower_dir = os.path.join(training_set_dir, flower_type)
         nb_flower = 0
-        for filename in os.listdir(flower_dir):
-            if filename.endswith('.jpg'):
-                nb_flower += 1
+        if os.path.exists(flower_dir):
+            for filename in os.listdir(flower_dir):
+                if filename.endswith('.jpg'):
+                    nb_flower += 1
         number_of_images.append(nb_flower)
 
     return dict(zip(flower_types, number_of_images))
@@ -26,8 +32,8 @@ def percentage_formatting(percentage):
     return '{:.1f}%\n'.format(percentage)
 
 
-def visualize_data():
-    data = count_data()
+def visualize_data(augmented: bool):
+    data = count_data(augmented)
     flowers = list(data.keys())
     nb_flowers = list(data.values())
 
@@ -51,7 +57,9 @@ def visualize_data():
 
 
 def main():
-    visualize_data()
+    visualize_data(False)
+    if os.path.exists(augmented_data_dir):
+        visualize_data(True)
 
 
 if __name__ == '__main__':
